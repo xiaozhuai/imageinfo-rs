@@ -34,6 +34,11 @@ to [@netroy](https://github.com/netroy).
 
 ## Example
 
+```toml
+[dependencies]
+imageinfo = "0.2.0"
+```
+
 ```rust
 use imageinfo::{ImageInfo};
 

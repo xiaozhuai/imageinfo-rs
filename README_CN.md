@@ -33,6 +33,11 @@ imageinfo 并不是通过扩展名来识别图片格式，而是通过文件头�
 
 ## 示例
 
+```toml
+[dependencies]
+imageinfo = "0.2.0"
+```
+
 ```rust
 use imageinfo::{ImageInfo};
 
