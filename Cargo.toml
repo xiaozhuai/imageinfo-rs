@@ -8,6 +8,7 @@ authors = ["xiaozhuai <798047000@qq.com>"]
 edition = "2018"
 exclude = [
     "images",
+    "tests",
 ]
 
 
