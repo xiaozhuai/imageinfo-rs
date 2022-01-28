@@ -1,0 +1,10 @@
+[package]
+name = "imageinfo"
+version = "0.1.0"
+authors = ["xiaozhuai <798047000@qq.com>"]
+edition = "2018"
+
+
+
+[dependencies]
+regex = "1"
