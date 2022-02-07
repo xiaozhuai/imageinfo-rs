@@ -1,21 +1,7 @@
 mod defs;
 mod raw_buffer;
 mod read_interface;
-mod try_avif_heic;
-mod try_bmp;
-mod try_cur_ico;
-mod try_dds;
-mod try_gif;
-mod try_hdr;
-mod try_icns;
-mod try_jp2_jpx;
-mod try_jpg;
-mod try_ktx;
-mod try_png;
-mod try_psd;
-mod try_tiff;
-mod try_webp;
-mod try_tga;
+mod formats;
 
 use std::io::{BufReader, Seek, BufRead, SeekFrom};
 use std::fs::File;
@@ -24,21 +10,22 @@ pub use defs::ImageInfoError;
 pub use defs::ImageInfoResult;
 use raw_buffer::RawBuffer;
 use read_interface::ReadInterface;
-use try_avif_heic::try_avif_heic;
-use try_bmp::try_bmp;
-use try_cur_ico::try_cur_ico;
-use try_dds::try_dds;
-use try_gif::try_gif;
-use try_hdr::try_hdr;
-use try_icns::try_icns;
-use try_jp2_jpx::try_jp2_jpx;
-use try_jpg::try_jpg;
-use try_ktx::try_ktx;
-use try_png::try_png;
-use try_psd::try_psd;
-use try_tiff::try_tiff;
-use try_webp::try_webp;
-use try_tga::try_tga;
+use formats::try_avif_heic;
+use formats::try_bmp;
+use formats::try_cur_ico;
+use formats::try_dds;
+use formats::try_gif;
+use formats::try_hdr;
+use formats::try_icns;
+use formats::try_jp2_jpx;
+use formats::try_jpg;
+use formats::try_ktx;
+use formats::try_png;
+use formats::try_psd;
+use formats::try_tiff;
+use formats::try_webp;
+use formats::try_tga;
+
 
 #[derive(PartialEq)]
 #[derive(Debug)]
