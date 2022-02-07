@@ -36,7 +36,7 @@ to [@netroy](https://github.com/netroy).
 
 ```toml
 [dependencies]
-imageinfo = "0.4.0"
+imageinfo = "0.5.0"
 ```
 
 ```rust
