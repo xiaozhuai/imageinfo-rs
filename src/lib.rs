@@ -5,6 +5,7 @@ mod formats;
 
 use std::io::{BufReader, Seek, BufRead, SeekFrom};
 use std::fs::File;
+use std::path::Path;
 pub use defs::ImageSize;
 pub use defs::ImageInfoError;
 pub use defs::ImageInfoResult;
@@ -131,14 +132,14 @@ impl ImageInfo {
         Err(ImageInfoError::UnrecognizedFormat)
     }
 
-    pub fn from_file(file: &mut File) -> ImageInfoResult<ImageInfo> {
+    pub fn from_file(file: &File) -> ImageInfoResult<ImageInfo> {
         let mut reader = BufReader::new(file);
         Self::from_reader(&mut reader)
     }
 
-    pub fn from_file_path(filepath: &str) -> ImageInfoResult<ImageInfo> {
-        let mut file = File::open(filepath)?;
-        Self::from_file(&mut file)
+    pub fn from_file_path(filepath: impl AsRef<Path>) -> ImageInfoResult<ImageInfo> {
+        let file = File::open(filepath)?;
+        Self::from_file(&file)
     }
 }
 
