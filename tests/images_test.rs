@@ -507,6 +507,21 @@ fn test_psd() {
 }
 
 #[test]
+fn test_qoi() {
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/qoi/sample.qoi"),
+        ImageInfo {
+            format: ImageFormat::QOI,
+            ext: "qoi",
+            full_ext: "qoi",
+            mimetype: "image/qoi",
+            size: ImageSize { width: 123, height: 456 },
+            entry_sizes: vec![],
+        }
+    );
+}
+
+#[test]
 fn test_tiff() {
     assert_eq_ok!(
         ImageInfo::from_file_path("images/valid/tiff/big-endian.tiff"),

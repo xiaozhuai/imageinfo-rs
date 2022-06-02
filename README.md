@@ -26,6 +26,7 @@ to [@netroy](https://github.com/netroy).
 * [x] ktx
 * [x] png
 * [x] psd
+* [x] qoi
 * [ ] svg
 * [x] tga
 * [x] tiff (tif)
@@ -36,7 +37,7 @@ to [@netroy](https://github.com/netroy).
 
 ```toml
 [dependencies]
-imageinfo = "0.5.0"
+imageinfo = "0.6.0"
 ```
 
 ```rust

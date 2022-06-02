@@ -26,6 +26,7 @@ use formats::try_psd;
 use formats::try_tiff;
 use formats::try_webp;
 use formats::try_tga;
+use crate::formats::try_qoi;
 
 
 #[derive(PartialEq)]
@@ -46,6 +47,7 @@ pub enum ImageFormat {
     KTX,
     PNG,
     PSD,
+    QOI,
     TIFF,
     WEBP,
     TGA,
@@ -113,6 +115,10 @@ impl ImageInfo {
         }
 
         if let Result::Ok(image_info) = try_psd(&mut ri, length) {
+            return Ok(image_info);
+        }
+
+        if let Result::Ok(image_info) = try_qoi(&mut ri, length) {
             return Ok(image_info);
         }
 
