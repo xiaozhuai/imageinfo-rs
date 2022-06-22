@@ -514,6 +514,18 @@ fn test_png() {
             entry_sizes: vec![],
         }
     );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/png/sample_apng.png"),
+        ImageInfo {
+            format: ImageFormat::PNG,
+            ext: "png",
+            full_ext: "png",
+            mimetype: "image/png",
+            size: ImageSize { width: 480, height: 400 },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]
