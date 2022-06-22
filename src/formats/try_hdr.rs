@@ -21,8 +21,8 @@ pub fn try_hdr<R>(
     let mut read = 6usize;
     let piece = 64usize;
     let mut header = String::new();
-    let x_pattern = Regex::new(r"\s([-+])X\s(\d+)\s").unwrap();
-    let y_pattern = Regex::new(r"\s([-+])Y\s(\d+)\s").unwrap();
+    let x_pattern = Regex::new(r"\s[-+]X\s(\d+)\s").unwrap();
+    let y_pattern = Regex::new(r"\s[-+]Y\s(\d+)\s").unwrap();
     while read < length {
         let buffer = ri.read(read, min(length - read, piece))?;
         header += &buffer.read_str(0usize, buffer.len());
@@ -32,11 +32,11 @@ pub fn try_hdr<R>(
         if x_captures.is_some() && y_captures.is_some() {
             let x_captures = x_captures.unwrap();
             let y_captures = y_captures.unwrap();
-            if x_captures.len() < 3 || y_captures.len() < 3 {
+            if x_captures.len() < 2 || y_captures.len() < 2 {
                 return Err(ImageInfoError::UnrecognizedFormat);
             }
-            let width = &x_captures[2];
-            let height = &y_captures[2];
+            let width = &x_captures[1];
+            let height = &y_captures[1];
             return Ok(ImageInfo {
                 format: ImageFormat::HDR,
                 ext: "hdr",
