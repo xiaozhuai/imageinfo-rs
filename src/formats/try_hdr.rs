@@ -13,37 +13,43 @@ pub fn try_hdr<R>(
     if length < 6 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
-    // TODO Max header size ? Or just read header line by line
-    let buffer = ri.read(0, min(length, 256))?;
+    let buffer = ri.read(0, min(length, 6))?;
     if !buffer.cmp_any_of(0, 6, vec![b"#?RGBE", b"#?XYZE"]) {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
-    let header = buffer.read_str(0, buffer.len());
+    let mut read = 6usize;
+    let piece = 64usize;
+    let mut header = String::new();
     let x_pattern = Regex::new(r"\s([-+])X\s(\d+)\s").unwrap();
     let y_pattern = Regex::new(r"\s([-+])Y\s(\d+)\s").unwrap();
-    let x_captures = x_pattern.captures(&header);
-    let y_captures = y_pattern.captures(&header);
-    if x_captures.is_none() || y_captures.is_none() {
-        return Err(ImageInfoError::UnrecognizedFormat);
+    while read < length {
+        let buffer = ri.read(read, min(length - read, piece))?;
+        header += &buffer.read_str(0usize, buffer.len());
+        read += piece;
+        let x_captures = x_pattern.captures(&header);
+        let y_captures = y_pattern.captures(&header);
+        if x_captures.is_some() && y_captures.is_some() {
+            let x_captures = x_captures.unwrap();
+            let y_captures = y_captures.unwrap();
+            if x_captures.len() < 3 || y_captures.len() < 3 {
+                return Err(ImageInfoError::UnrecognizedFormat);
+            }
+            let width = &x_captures[2];
+            let height = &y_captures[2];
+            return Ok(ImageInfo {
+                format: ImageFormat::HDR,
+                ext: "hdr",
+                full_ext: "hdr",
+                mimetype: "image/vnd.radiance",
+                size: ImageSize {
+                    width: i64::from_str(width).unwrap(),
+                    height: i64::from_str(height).unwrap(),
+                },
+                entry_sizes: vec![],
+            });
+        }
     }
-    let x_captures = x_captures.unwrap();
-    let y_captures = y_captures.unwrap();
-    if x_captures.len() < 3 || y_captures.len() < 3 {
-        return Err(ImageInfoError::UnrecognizedFormat);
-    }
-    let width = &x_captures[2];
-    let height = &y_captures[2];
-    Ok(ImageInfo {
-        format: ImageFormat::HDR,
-        ext: "hdr",
-        full_ext: "hdr",
-        mimetype: "image/vnd.radiance",
-        size: ImageSize {
-            width: i64::from_str(width).unwrap(),
-            height: i64::from_str(height).unwrap(),
-        },
-        entry_sizes: vec![],
-    })
+    Err(ImageInfoError::UnrecognizedFormat)
 }
 
