@@ -1,4 +1,4 @@
-use imageinfo::{ImageFormat, ImageInfo, ImageSize, ImageInfoError, ImageInfoResult};
+use imageinfo::{ImageFormat, ImageInfo, ImageSize, ImageInfoError};
 
 macro_rules! assert_eq_ok {
     ($left:expr, $right:expr $(,)?) => ({
@@ -13,18 +13,43 @@ macro_rules! assert_eq_ok {
     });
 }
 
-// macro_rules! assert_eq_err {
-//     ($left:expr, $right:expr $(,)?) => ({
-//         match (&$left, &$right) {
-//             (left_val, right_val) => {
-//                 assert_eq!(left_val.is_ok(), false);
-//
-//
-//
-//             }
-//         }
-//     });
-// }
+macro_rules! assert_eq_io_err {
+    ($left:expr, $right:expr $(,)?) => ({
+        match (&$left, $right) {
+            (left_val, right_val) => {
+                match left_val {
+                    Err(err) => {
+                        match err {
+                            ImageInfoError::IoError(io_err) => {
+                                assert_eq!(io_err.kind(), right_val)
+                            }
+                            _ => { panic!() }
+                        }
+                    }
+                    _ => { panic!() }
+                }
+            }
+        }
+    });
+}
+
+macro_rules! assert_unrecognized_err {
+    ($left:expr) => ({
+        match (&$left) {
+            left_val => {
+                match left_val {
+                    Err(err) => {
+                        match err {
+                            ImageInfoError::UnrecognizedFormat => {}
+                            _ => { panic!() }
+                        }
+                    }
+                    _ => { panic!() }
+                }
+            }
+        }
+    });
+}
 
 #[test]
 fn test_avif() {
@@ -616,16 +641,13 @@ fn test_tga() {
 
 #[test]
 fn test_io_error() {
-    // assert_eq_err!(
-    //     ImageInfo::from_file_path("not_found.png"),
-    //     ImageInfoError::IoError(std::io::Error::new(std::io::ErrorKind::NotFound))
-    // );
+    assert_eq_io_err!(
+        ImageInfo::from_file_path("not_found.png"),
+        std::io::ErrorKind::NotFound
+    );
 }
 
 #[test]
 fn test_unrecognized() {
-    // assert_eq_err!(
-    //     ImageInfo::from_file_path("not_found.png"),
-    //     ImageInfoError::IoError(std::io::Error::new(std::io::ErrorKind::NotFound))
-    // );
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/sample.png"));
 }

@@ -34,4 +34,4 @@ impl From<std::io::Error> for ImageInfoError {
     }
 }
 
-pub type ImageInfoResult<T> = std::result::Result<T, ImageInfoError>;
+pub type ImageInfoResult<T> = Result<T, ImageInfoError>;
