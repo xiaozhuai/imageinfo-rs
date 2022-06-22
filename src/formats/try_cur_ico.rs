@@ -13,7 +13,7 @@ pub fn try_cur_ico<R>(
 
     let mut ret =
         // ico type == 1
-        if buffer.cmp(0, 4, &[0x00, 0x00, 0x01, 0x00]) {
+        if buffer.cmp(0, 4, b"\x00\x00\x01\x00") {
             ImageInfo {
                 format: ImageFormat::ICO,
                 ext: "ico",
@@ -27,7 +27,7 @@ pub fn try_cur_ico<R>(
             }
         }
         // cur type == 2
-        else if buffer.cmp(0, 4, &[0x00, 0x00, 0x02, 0x00]) {
+        else if buffer.cmp(0, 4, b"\x00\x00\x02\x00") {
             ImageInfo {
                 format: ImageFormat::CUR,
                 ext: "cur",

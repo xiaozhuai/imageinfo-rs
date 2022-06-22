@@ -23,11 +23,10 @@ use formats::try_jpg;
 use formats::try_ktx;
 use formats::try_png;
 use formats::try_psd;
+use formats::try_qoi;
+use formats::try_tga;
 use formats::try_tiff;
 use formats::try_webp;
-use formats::try_tga;
-use crate::formats::try_qoi;
-
 
 #[derive(PartialEq)]
 #[derive(Debug)]
@@ -70,68 +69,68 @@ impl ImageInfo {
         let length = reader.seek(SeekFrom::End(0))? as usize;
         let mut ri = ReadInterface { reader };
 
-        if let Result::Ok(image_info) = try_avif_heic(&mut ri, length) {
+        if let Ok(image_info) = try_avif_heic(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_bmp(&mut ri, length) {
+        if let Ok(image_info) = try_bmp(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_cur_ico(&mut ri, length) {
+        if let Ok(image_info) = try_cur_ico(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_dds(&mut ri, length) {
+        if let Ok(image_info) = try_dds(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_gif(&mut ri, length) {
+        if let Ok(image_info) = try_gif(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_hdr(&mut ri, length) {
+        if let Ok(image_info) = try_hdr(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_icns(&mut ri, length) {
+        if let Ok(image_info) = try_icns(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_jp2_jpx(&mut ri, length) {
+        if let Ok(image_info) = try_jp2_jpx(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_jpg(&mut ri, length) {
+        if let Ok(image_info) = try_jpg(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_ktx(&mut ri, length) {
+        if let Ok(image_info) = try_ktx(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_png(&mut ri, length) {
+        if let Ok(image_info) = try_png(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_psd(&mut ri, length) {
+        if let Ok(image_info) = try_psd(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_qoi(&mut ri, length) {
+        if let Ok(image_info) = try_qoi(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_tiff(&mut ri, length) {
+        if let Ok(image_info) = try_tiff(&mut ri, length) {
             return Ok(image_info);
         }
 
-        if let Result::Ok(image_info) = try_webp(&mut ri, length) {
+        if let Ok(image_info) = try_webp(&mut ri, length) {
             return Ok(image_info);
         }
 
         // !!! keep tga last !!!
-        if let Result::Ok(image_info) = try_tga(&mut ri, length) {
+        if let Ok(image_info) = try_tga(&mut ri, length) {
             return Ok(image_info);
         }
 

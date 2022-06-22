@@ -11,7 +11,7 @@ pub fn try_jpg<R>(
         return Err(ImageInfoError::UnrecognizedFormat);
     }
     let buffer = ri.read(0, 2)?;
-    if !buffer.cmp(0, 2, &[0xFF, 0xD8]) {
+    if !buffer.cmp(0, 2, b"\xFF\xD8") {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
@@ -34,7 +34,7 @@ pub fn try_jpg<R>(
         // 0xFFC0 is baseline standard (SOF0)
         // 0xFFC1 is baseline optimized (SOF1)
         // 0xFFC2 is progressive (SOF2)
-        if buffer.cmp_any_of(0, 2, vec![&[0xFF, 0xC0], &[0xFF, 0xC1], &[0xFF, 0xC2]]) {
+        if buffer.cmp_any_of(0, 2, vec![b"\xFF\xC0", b"\xFF\xC1", b"\xFF\xC2"]) {
             ret.size.width = buffer.read_u16_be(7) as i64;
             ret.size.height = buffer.read_u16_be(5) as i64;
             break;
