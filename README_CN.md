@@ -36,7 +36,7 @@ imageinfo 并不是通过扩展名来识别图片格式，而是通过文件头�
 
 ```toml
 [dependencies]
-imageinfo = "0.7.0"
+imageinfo = "0.7.11"
 ```
 
 ```rust
