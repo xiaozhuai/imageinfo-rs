@@ -71,13 +71,15 @@ pub fn try_jp2_jpx<R>(
             if buffer.cmp(12, 4, b"ihdr") {
                 ret.size.width = buffer.read_u32_be(20) as i64;
                 ret.size.height = buffer.read_u32_be(16) as i64;
+                return Ok(ret);
+            } else {
+                return Err(ImageInfoError::UnrecognizedFormat);
             }
-            break;
         }
         let box_length = buffer.read_u32_be(0) as usize;
         offset += box_length;
     }
 
-    Ok(ret)
+    Err(ImageInfoError::UnrecognizedFormat)
 }
 

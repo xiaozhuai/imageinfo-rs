@@ -16,21 +16,21 @@ pub fn try_png<R>(
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
-    let ret =
-        if buffer.cmp(12, 4, b"IHDR") && buffer.len() >= 24 {
-            ImageInfo {
-                format: ImageFormat::PNG,
-                ext: "png",
-                full_ext: "png",
-                mimetype: "image/png",
-                size: ImageSize {
-                    width: buffer.read_u32_be(16) as i64,
-                    height: buffer.read_u32_be(20) as i64,
-                },
-                entry_sizes: vec![],
-            }
-        } else if buffer.cmp(12, 4, b"CgBI") {
-            ImageInfo {
+    if buffer.cmp(12, 4, b"IHDR") && buffer.len() >= 24 {
+        return Ok(ImageInfo {
+            format: ImageFormat::PNG,
+            ext: "png",
+            full_ext: "png",
+            mimetype: "image/png",
+            size: ImageSize {
+                width: buffer.read_u32_be(16) as i64,
+                height: buffer.read_u32_be(20) as i64,
+            },
+            entry_sizes: vec![],
+        });
+    } else if buffer.cmp(12, 4, b"CgBI") {
+        if buffer.cmp(28, 4, b"IHDR") && buffer.len() >= 40 {
+            return Ok(ImageInfo {
                 format: ImageFormat::PNG,
                 ext: "png",
                 full_ext: "png",
@@ -40,11 +40,10 @@ pub fn try_png<R>(
                     height: buffer.read_u32_be(36) as i64,
                 },
                 entry_sizes: vec![],
-            }
-        } else {
-            return Err(ImageInfoError::UnrecognizedFormat);
-        };
+            });
+        }
+    }
 
-    Ok(ret)
+    Err(ImageInfoError::UnrecognizedFormat)
 }
 

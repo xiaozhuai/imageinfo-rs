@@ -106,12 +106,12 @@ pub fn try_avif_heic<R>(
         } else if buffer.cmp(offset + 4, 4, b"ispe") {
             ret.size.width = buffer.read_u32_be(offset + 12) as i64;
             ret.size.height = buffer.read_u32_be(offset + 16) as i64;
-            break;
+            return Ok(ret);
         } else {
             offset += box_size;
         }
     }
 
-    Ok(ret)
+    Err(ImageInfoError::UnrecognizedFormat)
 }
 

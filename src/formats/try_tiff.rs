@@ -95,6 +95,10 @@ pub fn try_tiff<R>(
         offset += 12;
     }
 
-    Ok(ret)
+    if ret.size.width != -1 && ret.size.height != -1 {
+        Ok(ret)
+    } else {
+        Err(ImageInfoError::UnrecognizedFormat)
+    }
 }
 

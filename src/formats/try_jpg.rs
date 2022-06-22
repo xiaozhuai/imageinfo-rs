@@ -37,11 +37,11 @@ pub fn try_jpg<R>(
         if buffer.cmp_any_of(0, 2, vec![b"\xFF\xC0", b"\xFF\xC1", b"\xFF\xC2"]) {
             ret.size.width = buffer.read_u16_be(7) as i64;
             ret.size.height = buffer.read_u16_be(5) as i64;
-            break;
+            return Ok(ret);
         }
         offset += section_size + 2;
     }
 
-    Ok(ret)
+    Err(ImageInfoError::UnrecognizedFormat)
 }
 
