@@ -1,6 +1,7 @@
 use std::io::{BufRead, Seek};
 use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
+// https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
 pub fn try_ktx<R>(
     ri: &mut ReadInterface<R>,
     length: usize,
@@ -10,7 +11,7 @@ pub fn try_ktx<R>(
         return Err(ImageInfoError::UnrecognizedFormat);
     }
     let buffer = ri.read(0, 44)?;
-    if !buffer.cmp(1, 6, b"KTX 11") {
+    if !buffer.cmp(0, 12, b"\xABKTX 11\xBB\r\n\x1A\n") {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
