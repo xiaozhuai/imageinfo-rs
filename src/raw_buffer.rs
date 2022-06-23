@@ -7,6 +7,10 @@ pub struct RawBuffer {
 
 #[allow(dead_code)]
 impl RawBuffer {
+    pub fn new(length: usize) -> RawBuffer {
+        return RawBuffer { data: vec![0; length] };
+    }
+
     pub fn piece(&self, offset: usize, length: usize) -> &[u8] {
         &(self.data[offset..(offset + length)])
     }

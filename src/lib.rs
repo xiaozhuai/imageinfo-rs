@@ -67,7 +67,7 @@ impl ImageInfo {
     pub fn from_reader<R>(reader: &mut R) -> ImageInfoResult<ImageInfo>
         where R: BufRead + Seek {
         let length = reader.seek(SeekFrom::End(0))? as usize;
-        let mut ri = ReadInterface { reader };
+        let mut ri = ReadInterface::from_reader(reader, length);
 
         if let Ok(image_info) = try_avif_heic(&mut ri, length) {
             return Ok(image_info);
