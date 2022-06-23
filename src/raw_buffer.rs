@@ -88,3 +88,9 @@ impl RawBuffer {
         false
     }
 }
+
+impl ToString for RawBuffer {
+    fn to_string(&self) -> String {
+        self.read_str(0usize, self.len())
+    }
+}

@@ -24,8 +24,7 @@ pub fn try_hdr<R>(
     let x_pattern = Regex::new(r"\s[-+]X\s(\d+)\s").unwrap();
     let y_pattern = Regex::new(r"\s[-+]Y\s(\d+)\s").unwrap();
     while read < length {
-        let buffer = ri.read(read, min(length - read, piece))?;
-        header += &buffer.read_str(0usize, buffer.len());
+        header += &(ri.read(read, min(length - read, piece))?.to_string());
         read += piece;
         let x_captures = x_pattern.captures(&header);
         let y_captures = y_pattern.captures(&header);
