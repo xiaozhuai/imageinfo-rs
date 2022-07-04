@@ -3,7 +3,7 @@ mod raw_buffer;
 mod read_interface;
 mod formats;
 
-use std::io::{BufReader, Seek, BufRead, SeekFrom};
+use std::io::{BufReader, Seek, BufRead, SeekFrom, Cursor};
 use std::fs::File;
 use std::path::Path;
 pub use defs::ImageSize;
@@ -145,6 +145,11 @@ impl ImageInfo {
     pub fn from_file_path(filepath: impl AsRef<Path>) -> ImageInfoResult<ImageInfo> {
         let file = File::open(filepath)?;
         Self::from_file(&file)
+    }
+
+    pub fn from_raw_data(data: &[u8]) -> ImageInfoResult<ImageInfo> {
+        let mut reader = BufReader::new(Cursor::new(data));
+        Self::from_reader(&mut reader)
     }
 }
 
