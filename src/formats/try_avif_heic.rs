@@ -73,6 +73,34 @@ where
                 entry_sizes: vec![],
             }
         }
+        // Fall back to the major brand
+        else if buffer.cmp(8, 4, b"avif") {
+            ImageInfo {
+                format: ImageFormat::AVIF,
+                ext: "avif",
+                full_ext: "avif",
+                mimetype: "image/avif",
+                size: ImageSize {
+                    width: 0,
+                    height: 0,
+                },
+                entry_sizes: vec![],
+            }
+        }
+        // Fall back to the major brand
+        else if buffer.cmp(8, 4, b"heic") {
+            ImageInfo {
+                format: ImageFormat::HEIC,
+                ext: "heic",
+                full_ext: "heic",
+                mimetype: "image/heic",
+                size: ImageSize {
+                    width: 0,
+                    height: 0,
+                },
+                entry_sizes: vec![],
+            }
+        }
         // invalid
         else {
             return Err(ImageInfoError::UnrecognizedFormat);
