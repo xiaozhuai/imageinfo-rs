@@ -1,15 +1,14 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
+use regex::Regex;
 use std::cmp::min;
 use std::io::{BufRead, Seek};
 use std::str::FromStr;
-use regex::Regex;
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // http://paulbourke.net/dataformats/pic/
-pub fn try_hdr<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_hdr<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 6 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -51,4 +50,3 @@ pub fn try_hdr<R>(
     }
     Err(ImageInfoError::UnrecognizedFormat)
 }
-

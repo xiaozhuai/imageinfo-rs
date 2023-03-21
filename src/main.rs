@@ -1,4 +1,4 @@
-use imageinfo::{ImageInfo};
+use imageinfo::ImageInfo;
 
 fn main() {
     for filepath in std::env::args().skip(1) {

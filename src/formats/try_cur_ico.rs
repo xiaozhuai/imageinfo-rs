@@ -1,11 +1,10 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
-pub fn try_cur_ico<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_cur_ico<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 6 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -45,7 +44,6 @@ pub fn try_cur_ico<R>(
             return Err(ImageInfoError::UnrecognizedFormat);
         };
 
-
     let entry_count = buffer.read_u16_le(4) as usize;
     if entry_count == 0 {
         return Err(ImageInfoError::UnrecognizedFormat);
@@ -65,16 +63,8 @@ pub fn try_cur_ico<R>(
     for i in 0..entry_count {
         let width = buffer.read_u8(i * entry_size);
         let height = buffer.read_u8(i * entry_size + 1);
-        let width = if width == 0 {
-            256i64
-        } else {
-            width as i64
-        };
-        let height = if height == 0 {
-            256i64
-        } else {
-            height as i64
-        };
+        let width = if width == 0 { 256i64 } else { width as i64 };
+        let height = if height == 0 { 256i64 } else { height as i64 };
         ret.entry_sizes.push(ImageSize { width, height });
 
         let bytes = buffer.read_i32_le(i * entry_size + 8) as usize;
@@ -86,4 +76,3 @@ pub fn try_cur_ico<R>(
 
     Ok(ret)
 }
-

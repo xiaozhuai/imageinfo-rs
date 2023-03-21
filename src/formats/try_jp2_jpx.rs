@@ -1,13 +1,12 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // https://docs.fileformat.com/image/jp2/
 // https://docs.fileformat.com/image/jpx/
-pub fn try_jp2_jpx<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_jp2_jpx<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 8 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -82,4 +81,3 @@ pub fn try_jp2_jpx<R>(
 
     Err(ImageInfoError::UnrecognizedFormat)
 }
-

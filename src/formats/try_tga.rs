@@ -1,13 +1,12 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // TODO Not rigorous enough, keep it as last detector
 // https://www.fileformat.info/format/tga/corion.htm
-pub fn try_tga<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_tga<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 18 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -50,10 +49,12 @@ pub fn try_tga<R>(
             || image_type == 10
             || image_type == 11
             || image_type == 32
-            || image_type == 33 {
+            || image_type == 33
+        {
             if first_color_map_entry_index == 0
                 && color_map_length == 0
-                && color_map_entry_size == 0 {
+                && color_map_entry_size == 0
+            {
                 return Ok(ImageInfo {
                     format: ImageFormat::TGA,
                     ext: "tga",
@@ -79,4 +80,3 @@ pub fn try_tga<R>(
 
     return Err(ImageInfoError::UnrecognizedFormat);
 }
-

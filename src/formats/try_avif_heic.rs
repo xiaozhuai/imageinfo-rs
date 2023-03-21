@@ -1,14 +1,13 @@
-use std::io::{BufRead, Seek};
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::collections::HashSet;
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
+use std::io::{BufRead, Seek};
 
 // https://nokiatech.github.io/heif/technical.html
 // https://www.jianshu.com/p/b016d10a087d
-pub fn try_avif_heic<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_avif_heic<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 4 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -22,7 +21,6 @@ pub fn try_avif_heic<R>(
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
-
     //
     // Major Brand
     //
@@ -30,7 +28,13 @@ pub fn try_avif_heic<R>(
     // HEIF: "mif1", "msf1"
     // HEIC: "heic", "heix", "hevc", "hevx"
     //
-    if !buffer.cmp_any_of(8, 4, vec![b"avif", b"mif1", b"msf1", b"heic", b"heix", b"hevc", b"hevx"]) {
+    if !buffer.cmp_any_of(
+        8,
+        4,
+        vec![
+            b"avif", b"mif1", b"msf1", b"heic", b"heix", b"hevc", b"hevx",
+        ],
+    ) {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
@@ -114,4 +118,3 @@ pub fn try_avif_heic<R>(
 
     Err(ImageInfoError::UnrecognizedFormat)
 }
-

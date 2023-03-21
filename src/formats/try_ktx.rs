@@ -1,12 +1,11 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // https://www.khronos.org/registry/KTX/specs/1.0/ktxspec_v1.html
-pub fn try_ktx<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_ktx<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 44 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -27,4 +26,3 @@ pub fn try_ktx<R>(
         entry_sizes: vec![],
     })
 }
-

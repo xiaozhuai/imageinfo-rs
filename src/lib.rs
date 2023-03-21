@@ -1,16 +1,11 @@
 mod defs;
+mod formats;
 mod raw_buffer;
 mod read_interface;
-mod formats;
 
-use std::io::{BufReader, Seek, BufRead, SeekFrom, Cursor};
-use std::fs::File;
-use std::path::Path;
-pub use defs::ImageSize;
 pub use defs::ImageInfoError;
 pub use defs::ImageInfoResult;
-use raw_buffer::RawBuffer;
-use read_interface::ReadInterface;
+pub use defs::ImageSize;
 use formats::try_avif_heic;
 use formats::try_bmp;
 use formats::try_cur_ico;
@@ -27,9 +22,13 @@ use formats::try_qoi;
 use formats::try_tga;
 use formats::try_tiff;
 use formats::try_webp;
+use raw_buffer::RawBuffer;
+use read_interface::ReadInterface;
+use std::fs::File;
+use std::io::{BufRead, BufReader, Cursor, Seek, SeekFrom};
+use std::path::Path;
 
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub enum ImageFormat {
     AVIF,
     HEIC,
@@ -52,8 +51,7 @@ pub enum ImageFormat {
     TGA,
 }
 
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub struct ImageInfo {
     pub format: ImageFormat,
     pub ext: &'static str,
@@ -65,7 +63,9 @@ pub struct ImageInfo {
 
 impl ImageInfo {
     pub fn from_reader<R>(reader: &mut R) -> ImageInfoResult<ImageInfo>
-        where R: BufRead + Seek {
+    where
+        R: BufRead + Seek,
+    {
         let length = reader.seek(SeekFrom::End(0))? as usize;
         let mut ri = ReadInterface::from_reader(reader, length);
 
@@ -152,4 +152,3 @@ impl ImageInfo {
         Self::from_reader(&mut reader)
     }
 }
-

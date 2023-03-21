@@ -1,12 +1,11 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // https://www.fileformat.info/format/tiff/corion.htm
-pub fn try_tiff<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_tiff<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 8 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -46,7 +45,8 @@ pub fn try_tiff<R>(
     };
 
     let mut i = 0usize;
-    while i < mum_entry && length >= offset + 12 && (ret.size.width == -1 || ret.size.height == -1) {
+    while i < mum_entry && length >= offset + 12 && (ret.size.width == -1 || ret.size.height == -1)
+    {
         let buffer = ri.read(offset, 12)?;
 
         let tag = if little_endian {
@@ -101,4 +101,3 @@ pub fn try_tiff<R>(
         Err(ImageInfoError::UnrecognizedFormat)
     }
 }
-

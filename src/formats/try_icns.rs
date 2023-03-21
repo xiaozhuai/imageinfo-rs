@@ -1,13 +1,12 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::cmp::max;
-use std::io::{BufRead, Seek};
 use std::collections::HashMap;
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
+use std::io::{BufRead, Seek};
 
-pub fn try_icns<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_icns<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 8 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -54,7 +53,10 @@ pub fn try_icns<R>(
         ("ic05", 32),
         ("icsB", 36),
         ("icsb", 18),
-    ].iter().cloned().collect();
+    ]
+    .iter()
+    .cloned()
+    .collect();
 
     let mut ret = ImageInfo {
         format: ImageFormat::ICNS,
@@ -75,7 +77,10 @@ pub fn try_icns<R>(
         let t = buffer.read_str(0, 4);
         let entry_size = buffer.read_u32_be(4) as usize;
         let s = *type_size_map.get(t.as_str()).unwrap();
-        ret.entry_sizes.push(ImageSize { width: s, height: s });
+        ret.entry_sizes.push(ImageSize {
+            width: s,
+            height: s,
+        });
         max_size = max(max_size, s);
         offset += entry_size;
     }
@@ -85,4 +90,3 @@ pub fn try_icns<R>(
 
     Ok(ret)
 }
-

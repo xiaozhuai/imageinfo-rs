@@ -1,13 +1,12 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::cmp::min;
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // https://developers.google.com/speed/webp/docs/riff_container
-pub fn try_webp<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_webp<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 16 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -50,4 +49,3 @@ pub fn try_webp<R>(
 
     Err(ImageInfoError::UnrecognizedFormat)
 }
-

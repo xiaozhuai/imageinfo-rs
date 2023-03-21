@@ -1,5 +1,4 @@
-#[derive(PartialEq)]
-#[derive(Debug)]
+#[derive(PartialEq, Debug)]
 pub struct ImageSize {
     pub width: i64,
     pub height: i64,
@@ -7,7 +6,10 @@ pub struct ImageSize {
 
 impl std::fmt::Display for ImageSize {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        f.write_fmt(format_args!("{{width: {}, height: {}}}", self.width, self.height))
+        f.write_fmt(format_args!(
+            "{{width: {}, height: {}}}",
+            self.width, self.height
+        ))
     }
 }
 

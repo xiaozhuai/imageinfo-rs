@@ -1,12 +1,11 @@
+use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
 use std::io::{BufRead, Seek};
-use crate::{ImageInfoResult, ImageFormat, ImageInfo, ImageInfoError, ImageSize, ReadInterface};
 
 // https://www.fileformat.info/format/gif/corion.htm
-pub fn try_gif<R>(
-    ri: &mut ReadInterface<R>,
-    length: usize,
-) -> ImageInfoResult<ImageInfo>
-    where R: BufRead + Seek {
+pub fn try_gif<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+where
+    R: BufRead + Seek,
+{
     if length < 10 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
@@ -28,7 +27,6 @@ pub fn try_gif<R>(
     };
 
     ret.size.width = buffer.read_u16_le(6) as i64;
-    // bmp height can be negative, it means flip Y
     ret.size.height = buffer.read_u16_le(8) as i64;
 
     Ok(ret)

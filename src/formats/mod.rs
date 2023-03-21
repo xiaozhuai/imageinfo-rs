@@ -11,9 +11,9 @@ mod try_ktx;
 mod try_png;
 mod try_psd;
 mod try_qoi;
+mod try_tga;
 mod try_tiff;
 mod try_webp;
-mod try_tga;
 
 pub use try_avif_heic::try_avif_heic;
 pub use try_bmp::try_bmp;
@@ -28,6 +28,6 @@ pub use try_ktx::try_ktx;
 pub use try_png::try_png;
 pub use try_psd::try_psd;
 pub use try_qoi::try_qoi;
+pub use try_tga::try_tga;
 pub use try_tiff::try_tiff;
 pub use try_webp::try_webp;
-pub use try_tga::try_tga;
