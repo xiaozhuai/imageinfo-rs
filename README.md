@@ -33,12 +33,10 @@ to [@netroy](https://github.com/netroy).
 * [x] webp
 * [ ] more coming...
 
-## Example
+## Installation
+See [https://crates.io/crates/imageinfo](https://crates.io/crates/imageinfo)
 
-```toml
-[dependencies]
-imageinfo = "0.7.6"
-```
+## Example
 
 ```rust
 use imageinfo::{ImageInfo};

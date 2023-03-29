@@ -32,12 +32,10 @@ imageinfo 并不是通过扩展名来识别图片格式，而是通过文件头�
 * [x] webp
 * [ ] more coming...
 
-## 示例
+## 安装
+见 [https://crates.io/crates/imageinfo](https://crates.io/crates/imageinfo)
 
-```toml
-[dependencies]
-imageinfo = "0.7.6"
-```
+## 示例
 
 ```rust
 use imageinfo::{ImageInfo};
