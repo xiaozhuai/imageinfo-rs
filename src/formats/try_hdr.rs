@@ -27,9 +27,7 @@ where
         read += piece;
         let x_captures = x_pattern.captures(&header);
         let y_captures = y_pattern.captures(&header);
-        if x_captures.is_some() && y_captures.is_some() {
-            let x_captures = x_captures.unwrap();
-            let y_captures = y_captures.unwrap();
+        if let (Some(x_captures), Some(y_captures)) = (x_captures, y_captures) {
             if x_captures.len() < 2 || y_captures.len() < 2 {
                 return Err(ImageInfoError::UnrecognizedFormat);
             }

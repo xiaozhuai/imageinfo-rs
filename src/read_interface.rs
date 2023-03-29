@@ -17,12 +17,12 @@ where
     R: BufRead + Seek,
 {
     pub fn from_reader(reader: R, length: usize) -> ReadInterface<R> {
-        return ReadInterface {
+        ReadInterface {
             reader,
             length,
             header_cache: vec![0; 0],
             header_cache_ok: false,
-        };
+        }
     }
 }
 

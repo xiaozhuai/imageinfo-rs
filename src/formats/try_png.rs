@@ -27,20 +27,18 @@ where
             },
             entry_sizes: vec![],
         });
-    } else if buffer.cmp(12, 4, b"CgBI") {
-        if buffer.cmp(28, 4, b"IHDR") && buffer.len() >= 40 {
-            return Ok(ImageInfo {
-                format: ImageFormat::PNG,
-                ext: "png",
-                full_ext: "png",
-                mimetype: "image/png",
-                size: ImageSize {
-                    width: buffer.read_u32_be(32) as i64,
-                    height: buffer.read_u32_be(36) as i64,
-                },
-                entry_sizes: vec![],
-            });
-        }
+    } else if buffer.cmp(12, 4, b"CgBI") && buffer.cmp(28, 4, b"IHDR") && buffer.len() >= 40 {
+        return Ok(ImageInfo {
+            format: ImageFormat::PNG,
+            ext: "png",
+            full_ext: "png",
+            mimetype: "image/png",
+            size: ImageSize {
+                width: buffer.read_u32_be(32) as i64,
+                height: buffer.read_u32_be(36) as i64,
+            },
+            entry_sizes: vec![],
+        });
     }
 
     Err(ImageInfoError::UnrecognizedFormat)

@@ -8,9 +8,9 @@ pub struct RawBuffer {
 #[allow(dead_code)]
 impl RawBuffer {
     pub fn new(length: usize) -> RawBuffer {
-        return RawBuffer {
+        RawBuffer {
             data: vec![0; length],
-        };
+        }
     }
 
     pub fn piece(&self, offset: usize, length: usize) -> &[u8] {
@@ -87,7 +87,7 @@ impl RawBuffer {
 
     pub fn cmp_any_of(&self, offset: usize, length: usize, buf_list: Vec<&[u8]>) -> bool {
         for buf in &buf_list {
-            if self.cmp(offset, length, *buf) {
+            if self.cmp(offset, length, buf) {
                 return true;
             }
         }
