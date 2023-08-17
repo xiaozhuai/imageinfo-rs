@@ -24,7 +24,7 @@ where
     //
     // Major Brand
     //
-    // AVIF: "avif"
+    // AVIF: "avif", "avis"
     // HEIF: "mif1", "msf1"
     // HEIC: "heic", "heix", "hevc", "hevx"
     //
@@ -32,7 +32,7 @@ where
         8,
         4,
         vec![
-            b"avif", b"mif1", b"msf1", b"heic", b"heix", b"hevc", b"hevx",
+            b"avif", b"avis", b"mif1", b"msf1", b"heic", b"heix", b"hevc", b"hevx",
         ],
     ) {
         return Err(ImageInfoError::UnrecognizedFormat);

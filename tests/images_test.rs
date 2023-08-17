@@ -82,6 +82,21 @@ fn test_avif() {
             entry_sizes: vec![],
         }
     );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/avif/sample3.avif"),
+        ImageInfo {
+            format: ImageFormat::AVIF,
+            ext: "avif",
+            full_ext: "avif",
+            mimetype: "image/avif",
+            size: ImageSize {
+                width: 1280,
+                height: 720
+            },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]
