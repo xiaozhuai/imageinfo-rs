@@ -28,7 +28,9 @@ use std::fs::File;
 use std::io::{BufRead, BufReader, Cursor, Seek, SeekFrom};
 use std::path::Path;
 
-#[derive(PartialEq, Debug)]
+use serde::Serialize;
+
+#[derive(Debug, PartialEq, Serialize)]
 pub enum ImageFormat {
     AVIF,
     HEIC,
@@ -51,7 +53,7 @@ pub enum ImageFormat {
     TGA,
 }
 
-#[derive(PartialEq, Debug)]
+#[derive(Debug, PartialEq, Serialize)]
 pub struct ImageInfo {
     pub format: ImageFormat,
     pub ext: &'static str,

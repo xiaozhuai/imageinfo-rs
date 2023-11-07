@@ -14,3 +14,4 @@ exclude = [
 
 [dependencies]
 regex = "1"
+serde = { version = "1", features = ["derive"] }
