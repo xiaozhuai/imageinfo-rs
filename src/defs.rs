@@ -1,4 +1,6 @@
-#[derive(PartialEq, Debug)]
+use serde::Serialize;
+
+#[derive(Debug, PartialEq, Serialize)]
 pub struct ImageSize {
     pub width: i64,
     pub height: i64,
@@ -33,6 +35,15 @@ impl std::fmt::Display for ImageInfoError {
 impl From<std::io::Error> for ImageInfoError {
     fn from(err: std::io::Error) -> ImageInfoError {
         ImageInfoError::IoError(err)
+    }
+}
+
+impl Serialize for ImageInfoError {
+    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
+    where
+        S: serde::Serializer,
+    {
+        serializer.serialize_str(self.to_string().as_ref())
     }
 }
 
