@@ -432,6 +432,20 @@ fn test_hdr() {
             entry_sizes: vec![],
         }
     );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/hdr/sample2.hdr"),
+        ImageInfo {
+            format: ImageFormat::HDR,
+            ext: "hdr",
+            full_ext: "hdr",
+            mimetype: "image/vnd.radiance",
+            size: ImageSize {
+                width: 1024,
+                height: 512
+            },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]

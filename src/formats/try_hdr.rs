@@ -13,7 +13,8 @@ where
         return Err(ImageInfoError::UnrecognizedFormat);
     }
     let buffer = ri.read(0, min(length, 6))?;
-    if !buffer.cmp_any_of(0, 6, vec![b"#?RGBE", b"#?XYZE"]) {
+    let buffer2 = ri.read(0, min(length, 10))?;
+    if !buffer.cmp_any_of(0, 6, vec![b"#?RGBE", b"#?XYZE"]) && !buffer2.cmp(0, 10, b"#?RADIANCE") {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
