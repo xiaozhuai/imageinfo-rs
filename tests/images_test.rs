@@ -643,6 +643,21 @@ fn test_jpg() {
     );
 
     assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/jpg/sample2.jpg"),
+        ImageInfo {
+            format: ImageFormat::JPEG,
+            ext: "jpg",
+            full_ext: "jpeg",
+            mimetype: "image/jpeg",
+            size: ImageSize {
+                width: 1200,
+                height: 1603
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
         ImageInfo::from_file_path("images/valid/jpg/sampleExported.jpg"),
         ImageInfo {
             format: ImageFormat::JPEG,

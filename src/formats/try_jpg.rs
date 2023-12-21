@@ -30,6 +30,12 @@ where
     while offset + 9 <= length {
         let buffer = ri.read(offset, 9)?;
         let section_size = buffer.read_u16_be(2) as usize;
+        if !buffer.cmp(0, 1, b"\xFF") {
+            // skip garbage bytes
+            offset += 1;
+            continue;
+        }
+
         // 0xFFC0 is baseline standard (SOF0)
         // 0xFFC1 is baseline optimized (SOF1)
         // 0xFFC2 is progressive (SOF2)
