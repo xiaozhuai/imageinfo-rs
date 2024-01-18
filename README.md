@@ -6,8 +6,9 @@ The imageinfo don't get image format by file ext name, but infer by file header 
 
 A rewrite of c++ version [imageinfo](https://github.com/xiaozhuai/imageinfo)
 
-Some test image files are from [image-size](https://github.com/image-size/image-size). Many thanks
-to [@netroy](https://github.com/netroy).
+Some test image files are from [image-size](https://github.com/image-size/image-size). Many thanks to [@netroy](https://github.com/netroy).
+
+[![ci](https://github.com/xiaozhuai/imageinfo-rs/actions/workflows/ci.yml/badge.svg)](https://github.com/xiaozhuai/imageinfo-rs/actions/workflows/ci.yml)
 
 ## Supported formats
 

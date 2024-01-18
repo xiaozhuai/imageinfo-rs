@@ -1,0 +1,42 @@
+name: ci
+
+on:
+    push:
+        branches: [ master ]
+    pull_request:
+        branches: [ master ]
+
+jobs:
+    linux:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    submodules: recursive
+            -   name: Build
+                run: |
+                    cargo test
+
+    macos:
+        runs-on: macos-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    submodules: recursive
+            -   name: Build
+                run: |
+                    cargo test
+
+    windows:
+        runs-on: windows-2019
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    submodules: recursive
+            -   name: Build
+                shell: cmd
+                run: |
+                    cargo test
