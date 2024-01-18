@@ -7,7 +7,19 @@ on:
         branches: [ master ]
 
 jobs:
+    code-style:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v3
+                with:
+                    submodules: recursive
+            -   name: Build
+                run: |
+                    cargo fmt --all --check
+
     linux:
+        needs: code-style
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -19,6 +31,7 @@ jobs:
                     cargo test
 
     macos:
+        needs: code-style
         runs-on: macos-latest
         steps:
             -   name: Checkout
@@ -30,6 +43,7 @@ jobs:
                     cargo test
 
     windows:
+        needs: code-style
         runs-on: windows-2019
         steps:
             -   name: Checkout
