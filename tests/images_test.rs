@@ -887,6 +887,122 @@ fn test_webp() {
 }
 
 #[test]
+fn test_pnm() {
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample-ascii.pbm"),
+        ImageInfo {
+            format: ImageFormat::PBM,
+            ext: "pbm",
+            full_ext: "pbm",
+            mimetype: "image/x-portable-bitmap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample-ascii.pgm"),
+        ImageInfo {
+            format: ImageFormat::PGM,
+            ext: "pgm",
+            full_ext: "pgm",
+            mimetype: "image/x-portable-graymap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample-ascii.ppm"),
+        ImageInfo {
+            format: ImageFormat::PPM,
+            ext: "ppm",
+            full_ext: "ppm",
+            mimetype: "image/x-portable-pixmap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample.pbm"),
+        ImageInfo {
+            format: ImageFormat::PBM,
+            ext: "pbm",
+            full_ext: "pbm",
+            mimetype: "image/x-portable-bitmap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample.pgm"),
+        ImageInfo {
+            format: ImageFormat::PGM,
+            ext: "pgm",
+            full_ext: "pgm",
+            mimetype: "image/x-portable-graymap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample.ppm"),
+        ImageInfo {
+            format: ImageFormat::PPM,
+            ext: "ppm",
+            full_ext: "ppm",
+            mimetype: "image/x-portable-pixmap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample.pam"),
+        ImageInfo {
+            format: ImageFormat::PAM,
+            ext: "pam",
+            full_ext: "pam",
+            mimetype: "image/x-portable-arbitrarymap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/pnm/sample.pfm"),
+        ImageInfo {
+            format: ImageFormat::PFM,
+            ext: "pfm",
+            full_ext: "pfm",
+            mimetype: "image/x-portable-floatmap",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+}
+
+#[test]
 fn test_tga() {
     assert_eq_ok!(
         ImageInfo::from_file_path("images/valid/tga/sample.tga"),

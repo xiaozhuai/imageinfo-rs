@@ -27,6 +27,15 @@ Some test image files are from [image-size](https://github.com/image-size/image-
 * [x] ktx
 * [x] png
 * [x] psd
+* [x] pnm
+    * [x] pbm/ascii
+    * [x] pgm/ascii
+    * [x] ppm/ascii
+    * [x] pbm/binary
+    * [x] pgm/binary
+    * [x] ppm/binary
+    * [x] pam
+    * [x] pfm
 * [x] qoi
 * [ ] svg
 * [x] tga

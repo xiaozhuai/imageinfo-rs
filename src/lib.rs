@@ -17,6 +17,7 @@ use formats::try_jp2_jpx;
 use formats::try_jpg;
 use formats::try_ktx;
 use formats::try_png;
+use formats::try_pnm;
 use formats::try_psd;
 use formats::try_qoi;
 use formats::try_tga;
@@ -31,7 +32,7 @@ use std::path::Path;
 
 use serde::Serialize;
 
-#[derive(Debug, PartialEq, Serialize)]
+#[derive(Debug, PartialEq, Serialize, Clone)]
 pub enum ImageFormat {
     AVIF,
     HEIC,
@@ -48,6 +49,11 @@ pub enum ImageFormat {
     KTX,
     PNG,
     PSD,
+    PBM,
+    PGM,
+    PPM,
+    PAM,
+    PFM,
     QOI,
     TIFF,
     WEBP,
@@ -74,7 +80,7 @@ impl ImageInfo {
         let length = reader.seek(SeekFrom::End(0))? as usize;
         let mut ri = ReadInterface::from_reader(reader, length);
 
-        let dl: [(ImageFormat, Detector<_>); 19] = [
+        let dl: [(ImageFormat, Detector<_>); 24] = [
             (ImageFormat::AVIF, try_avif_heic),
             (ImageFormat::HEIC, try_avif_heic),
             (ImageFormat::BMP, try_bmp),
@@ -93,6 +99,11 @@ impl ImageInfo {
             (ImageFormat::QOI, try_qoi),
             (ImageFormat::TIFF, try_tiff),
             (ImageFormat::WEBP, try_webp),
+            (ImageFormat::PBM, try_pnm),
+            (ImageFormat::PGM, try_pnm),
+            (ImageFormat::PPM, try_pnm),
+            (ImageFormat::PAM, try_pnm),
+            (ImageFormat::PFM, try_pnm),
             // !!! keep tga last !!!
             (ImageFormat::TGA, try_tga),
         ];

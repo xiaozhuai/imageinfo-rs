@@ -27,6 +27,15 @@ imageinfo 并不是通过扩展名来识别图片格式，而是通过文件头�
 * [x] ktx
 * [x] png
 * [x] psd
+* [x] pnm
+    * [x] pbm/ascii
+    * [x] pgm/ascii
+    * [x] ppm/ascii
+    * [x] pbm/binary
+    * [x] pgm/binary
+    * [x] ppm/binary
+    * [x] pam
+    * [x] pfm
 * [x] qoi
 * [ ] svg
 * [x] tga
