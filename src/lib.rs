@@ -24,6 +24,7 @@ use formats::try_tiff;
 use formats::try_webp;
 use raw_buffer::RawBuffer;
 use read_interface::ReadInterface;
+use std::collections::HashSet;
 use std::fs::File;
 use std::io::{BufRead, BufReader, Cursor, Seek, SeekFrom};
 use std::path::Path;
@@ -63,6 +64,8 @@ pub struct ImageInfo {
     pub entry_sizes: Vec<ImageSize>,
 }
 
+type Detector<R> = fn(&mut ReadInterface<R>, usize) -> ImageInfoResult<ImageInfo>;
+
 impl ImageInfo {
     pub fn from_reader<R>(reader: &mut R) -> ImageInfoResult<ImageInfo>
     where
@@ -71,69 +74,43 @@ impl ImageInfo {
         let length = reader.seek(SeekFrom::End(0))? as usize;
         let mut ri = ReadInterface::from_reader(reader, length);
 
-        if let Ok(image_info) = try_avif_heic(&mut ri, length) {
-            return Ok(image_info);
-        }
+        let dl: [(ImageFormat, Detector<_>); 19] = [
+            (ImageFormat::AVIF, try_avif_heic),
+            (ImageFormat::HEIC, try_avif_heic),
+            (ImageFormat::BMP, try_bmp),
+            (ImageFormat::CUR, try_cur_ico),
+            (ImageFormat::ICO, try_cur_ico),
+            (ImageFormat::DDS, try_dds),
+            (ImageFormat::GIF, try_gif),
+            (ImageFormat::HDR, try_hdr),
+            (ImageFormat::ICNS, try_icns),
+            (ImageFormat::JP2, try_jp2_jpx),
+            (ImageFormat::JPX, try_jp2_jpx),
+            (ImageFormat::JPEG, try_jpg),
+            (ImageFormat::KTX, try_ktx),
+            (ImageFormat::PNG, try_png),
+            (ImageFormat::PSD, try_psd),
+            (ImageFormat::QOI, try_qoi),
+            (ImageFormat::TIFF, try_tiff),
+            (ImageFormat::WEBP, try_webp),
+            // !!! keep tga last !!!
+            (ImageFormat::TGA, try_tga),
+        ];
 
-        if let Ok(image_info) = try_bmp(&mut ri, length) {
-            return Ok(image_info);
-        }
+        let mut tried: HashSet<&Detector<_>> = HashSet::new();
 
-        if let Ok(image_info) = try_cur_ico(&mut ri, length) {
-            return Ok(image_info);
-        }
+        // let dm: HashMap<ImageFormat, Detector<_>> = dl.iter().cloned().collect();
 
-        if let Ok(image_info) = try_dds(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_gif(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_hdr(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_icns(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_jp2_jpx(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_jpg(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_ktx(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_png(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_psd(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_qoi(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_tiff(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        if let Ok(image_info) = try_webp(&mut ri, length) {
-            return Ok(image_info);
-        }
-
-        // !!! keep tga last !!!
-        if let Ok(image_info) = try_tga(&mut ri, length) {
-            return Ok(image_info);
+        for d in dl.iter() {
+            // let format = &d.0;
+            let detector = &d.1;
+            if tried.contains(detector) {
+                continue;
+            }
+            tried.insert(detector);
+            if let Ok(image_info) = detector(&mut ri, length) {
+                return Ok(image_info);
+            }
         }
 
         Err(ImageInfoError::UnrecognizedFormat)
