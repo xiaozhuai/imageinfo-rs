@@ -11,7 +11,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     submodules: recursive
             -   name: Check code style
@@ -23,7 +23,7 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     submodules: recursive
             -   name: Build
@@ -35,7 +35,7 @@ jobs:
         runs-on: macos-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     submodules: recursive
             -   name: Build
@@ -47,7 +47,7 @@ jobs:
         runs-on: windows-latest
         steps:
             -   name: Checkout
-                uses: actions/checkout@v3
+                uses: actions/checkout@v4
                 with:
                     submodules: recursive
             -   name: Build
