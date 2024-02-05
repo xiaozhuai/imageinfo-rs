@@ -18,14 +18,15 @@ where
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
-    let mut read = 6usize;
+    let mut offset = 6usize;
     let piece = 64usize;
     let mut header = String::new();
     let x_pattern = Regex::new(r"\s[-+]X\s(\d+)\s").unwrap();
     let y_pattern = Regex::new(r"\s[-+]Y\s(\d+)\s").unwrap();
-    while read < length {
-        header += &(ri.read(read, min(length - read, piece))?.to_string());
-        read += piece;
+    while offset < length {
+        let buffer = ri.read(offset, min(length - offset, piece))?;
+        offset += buffer.len();
+        header += &(buffer.to_string());
         let x_captures = x_pattern.captures(&header);
         let y_captures = y_pattern.captures(&header);
         if let (Some(x_captures), Some(y_captures)) = (x_captures, y_captures) {
