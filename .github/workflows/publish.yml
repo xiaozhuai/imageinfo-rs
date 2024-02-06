@@ -1,18 +1,18 @@
 name: publish
 
 on:
-  create:
-    tags:
-      - v*
+    create:
+        tags:
+            - "v[0-9]+.[0-9]+.[0-9]+"
 
 jobs:
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      -   name: Checkout
-          uses: actions/checkout@v4
-          with:
-            submodules: recursive
-      -   name: Build
-          run: |
-            cargo publish --token "${{ secrets.CRATES_IO_TOKEN }}"
+    publish:
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+                with:
+                    submodules: recursive
+            -   name: Publish
+                run: |
+                    cargo publish --token "${{ secrets.CRATES_IO_TOKEN }}"
