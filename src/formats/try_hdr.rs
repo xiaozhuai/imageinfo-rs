@@ -12,13 +12,19 @@ where
     if length < 6 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
-    let buffer = ri.read(0, min(length, 6))?;
-    let buffer2 = ri.read(0, min(length, 10))?;
-    if !buffer.cmp_any_of(0, 6, vec![b"#?RGBE", b"#?XYZE"]) && !buffer2.cmp(0, 10, b"#?RADIANCE") {
-        return Err(ImageInfoError::UnrecognizedFormat);
+    let mut offset = 6usize;
+    let buffer = ri.read(0, 6)?;
+    if !buffer.cmp_any_of(0, 6, vec![b"#?RGBE", b"#?XYZE"]) {
+        if length < 10 {
+            return Err(ImageInfoError::UnrecognizedFormat);
+        }
+        offset = 10usize;
+        let buffer = ri.read(0, 10)?;
+        if !buffer.cmp(0, 10, b"#?RADIANCE") {
+            return Err(ImageInfoError::UnrecognizedFormat);
+        }
     }
 
-    let mut offset = 6usize;
     let piece = 64usize;
     let mut header = String::new();
     let x_pattern = Regex::new(r"\s[-+]X\s(\d+)\s").unwrap();
