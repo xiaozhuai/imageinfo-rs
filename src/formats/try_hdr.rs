@@ -30,7 +30,7 @@ where
     while offset < length {
         let buffer = ri.read(offset, min(length - offset, piece))?;
         offset += buffer.len();
-        header += &(buffer.to_string());
+        header += &(buffer.read_str_all());
         if resolution_start == 0 {
             if let Some(pos) = header.find("\n\n") {
                 resolution_start = pos + 2;
@@ -65,5 +65,5 @@ where
             });
         }
     }
-    return Err(ImageInfoError::UnrecognizedFormat);
+    Err(ImageInfoError::UnrecognizedFormat)
 }

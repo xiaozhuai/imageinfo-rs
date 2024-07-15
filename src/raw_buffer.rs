@@ -81,6 +81,10 @@ impl RawBuffer {
         String::from_utf8_lossy(self.piece(offset, length)).to_string()
     }
 
+    pub fn read_str_all(&self) -> String {
+        self.read_str(0, self.len())
+    }
+
     pub fn cmp(&self, offset: usize, length: usize, buf: &[u8]) -> bool {
         self.piece(offset, length) == buf
     }
@@ -92,11 +96,5 @@ impl RawBuffer {
             }
         }
         false
-    }
-}
-
-impl ToString for RawBuffer {
-    fn to_string(&self) -> String {
-        self.read_str(0usize, self.len())
     }
 }
