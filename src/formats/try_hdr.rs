@@ -52,15 +52,18 @@ where
     }
     let y_str = tokens[1];
     let x_str = tokens[3];
-    Ok(ImageInfo {
-        format: ImageFormat::HDR,
-        ext: "hdr",
-        full_ext: "hdr",
-        mimetype: "image/vnd.radiance",
-        size: ImageSize {
-            width: i64::from_str(x_str).unwrap(),
-            height: i64::from_str(y_str).unwrap(),
-        },
-        entry_sizes: vec![],
-    })
+
+    if let Ok(width) = i64::from_str(x_str) {
+        if let Ok(height) = i64::from_str(y_str) {
+            return Ok(ImageInfo {
+                format: ImageFormat::HDR,
+                ext: "hdr",
+                full_ext: "hdr",
+                mimetype: "image/vnd.radiance",
+                size: ImageSize { width, height },
+                entry_sizes: vec![],
+            });
+        }
+    }
+    return Err(ImageInfoError::UnrecognizedFormat);
 }
