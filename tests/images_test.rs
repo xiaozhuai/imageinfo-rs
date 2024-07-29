@@ -915,4 +915,20 @@ fn test_io_error() {
 #[test]
 fn test_unrecognized() {
     assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/sample.png"));
+    assert_unrecognized_err!(ImageInfo::from_file_path(
+        "images/invalid/crash_assert_failed"
+    ));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_avif_1"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_avif_2"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_avif_3"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_avif_4"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_hdr_1"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_hdr_2"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_hdr_3"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_hdr_4"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_icns_1"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_icns_2"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_png_1"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_png_2"));
+    assert_unrecognized_err!(ImageInfo::from_file_path("images/invalid/crash_tiff_1"));
 }

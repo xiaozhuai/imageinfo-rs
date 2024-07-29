@@ -47,6 +47,9 @@ where
     let mut i = 0usize;
     while i < mum_entry && length >= offset + 12 && (ret.size.width == -1 || ret.size.height == -1)
     {
+        if length < offset + 12 {
+            break;
+        }
         let buffer = ri.read(offset, 12)?;
 
         let tag = if little_endian {

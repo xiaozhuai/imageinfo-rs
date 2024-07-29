@@ -71,8 +71,12 @@ where
         offset += bytes;
     }
 
-    ret.size.width = ret.entry_sizes.first().unwrap().width;
-    ret.size.height = ret.entry_sizes.first().unwrap().height;
+    if let Some(size) = ret.entry_sizes.first() {
+        ret.size.width = size.width;
+        ret.size.height = size.height;
+    } else {
+        return Err(ImageInfoError::UnrecognizedFormat);
+    }
 
     Ok(ret)
 }

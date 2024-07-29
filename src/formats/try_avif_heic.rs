@@ -13,7 +13,7 @@ where
     }
     let buffer = ri.read(0, 4)?;
     let ftyp_box_length = buffer.read_u32_be(0) as usize;
-    if length < ftyp_box_length + 12 {
+    if (length as u64) < (ftyp_box_length as u64) + 12u64 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
     let buffer = ri.read(0, ftyp_box_length + 12)?;
@@ -38,6 +38,9 @@ where
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
+    if ftyp_box_length < 16 || (ftyp_box_length - 16) % 4 != 0 {
+        return Err(ImageInfoError::UnrecognizedFormat);
+    }
     let compatible_brand_size = (ftyp_box_length - 16) / 4;
     let mut compatible_brands = HashSet::new();
     for i in 0..compatible_brand_size {
@@ -111,7 +114,7 @@ where
     }
 
     let meta_length = buffer.read_u32_be(ftyp_box_length) as usize;
-    if length < ftyp_box_length + 12 + meta_length {
+    if (length as u64) < (ftyp_box_length as u64) + 12u64 + (meta_length as u64) {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
@@ -131,7 +134,14 @@ where
     //           - ispe
     //
     while offset < end {
+        if offset + 8 > end {
+            return Err(ImageInfoError::UnrecognizedFormat);
+        }
         let box_size = buffer.read_u32_be(offset) as usize;
+        if box_size < 8 || (offset as u64) + (box_size as u64) > (end as u64) {
+            return Err(ImageInfoError::UnrecognizedFormat);
+        }
+
         if buffer.cmp_any_of(offset + 4, 4, vec![b"iprp", b"ipco"]) {
             end = offset + box_size;
             offset += 8;

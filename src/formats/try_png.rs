@@ -7,7 +7,7 @@ pub fn try_png<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<I
 where
     R: BufRead + Seek,
 {
-    if length < 4 {
+    if length < 24 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
     let buffer = ri.read(0, min(length, 40))?;
@@ -15,7 +15,7 @@ where
         return Err(ImageInfoError::UnrecognizedFormat);
     }
 
-    if buffer.cmp(12, 4, b"IHDR") && buffer.len() >= 24 {
+    if buffer.cmp(12, 4, b"IHDR") {
         return Ok(ImageInfo {
             format: ImageFormat::PNG,
             ext: "png",
@@ -27,7 +27,7 @@ where
             },
             entry_sizes: vec![],
         });
-    } else if buffer.cmp(12, 4, b"CgBI") && buffer.cmp(28, 4, b"IHDR") && buffer.len() >= 40 {
+    } else if buffer.cmp(12, 4, b"CgBI") && buffer.len() >= 40 && buffer.cmp(28, 4, b"IHDR") {
         return Ok(ImageInfo {
             format: ImageFormat::PNG,
             ext: "png",

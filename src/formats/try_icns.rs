@@ -76,15 +76,17 @@ where
         let buffer = ri.read(offset, 8)?;
         let t = buffer.read_str(0, 4);
         let entry_size = buffer.read_u32_be(4) as usize;
-        let s = *type_size_map.get(t.as_str()).unwrap();
-        ret.entry_sizes.push(ImageSize {
-            width: s,
-            height: s,
-        });
-        max_size = max(max_size, s);
-        offset += entry_size;
+        if let Some(s) = type_size_map.get(t.as_str()) {
+            ret.entry_sizes.push(ImageSize {
+                width: *s,
+                height: *s,
+            });
+            max_size = max(max_size, *s);
+            offset += entry_size;
+        } else {
+            return Err(ImageInfoError::UnrecognizedFormat);
+        }
     }
-
     ret.size.width = max_size;
     ret.size.height = max_size;
 
