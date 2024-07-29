@@ -18,39 +18,25 @@ jobs:
                 run: |
                     cargo fmt --all --check
 
-    linux:
+    build:
         needs: code-style
-        runs-on: ubuntu-latest
+        runs-on: ${{ matrix.platform }}
+        strategy:
+            matrix:
+                platform:
+                    - ubuntu-latest
+                    - ubuntu-22.04
+                    - ubuntu-20.04
+                    - macos-latest
+                    - macos-13
+                    - macos-12
+                    - windows-latest
+                    - windows-2019
         steps:
             -   name: Checkout
                 uses: actions/checkout@v4
                 with:
                     submodules: recursive
             -   name: Build
-                run: |
-                    cargo test
-
-    macos:
-        needs: code-style
-        runs-on: macos-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-                with:
-                    submodules: recursive
-            -   name: Build
-                run: |
-                    cargo test
-
-    windows:
-        needs: code-style
-        runs-on: windows-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-                with:
-                    submodules: recursive
-            -   name: Build
-                shell: cmd
                 run: |
                     cargo test
