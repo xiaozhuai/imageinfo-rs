@@ -515,6 +515,39 @@ fn test_icns() {
 }
 
 #[test]
+fn test_j2k() {
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/j2k/balloon.j2k"),
+        ImageInfo {
+            format: ImageFormat::J2K,
+            ext: "j2k",
+            full_ext: "j2k",
+            mimetype: "image/j2k",
+            size: ImageSize {
+                width: 2717,
+                height: 3701
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/j2k/sample.j2k"),
+        ImageInfo {
+            format: ImageFormat::J2K,
+            ext: "j2k",
+            full_ext: "j2k",
+            mimetype: "image/j2k",
+            size: ImageSize {
+                width: 123,
+                height: 456
+            },
+            entry_sizes: vec![],
+        }
+    );
+}
+
+#[test]
 fn test_jp2() {
     assert_eq_ok!(
         ImageInfo::from_file_path("images/valid/jp2/sample.jp2"),

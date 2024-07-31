@@ -21,6 +21,7 @@ Some test image files are from [image-size](https://github.com/image-size/image-
 * [x] heic (heif)
 * [x] icns
 * [x] ico
+* [x] j2k
 * [x] jp2
 * [x] jpeg (jpg)
 * [x] jpx
