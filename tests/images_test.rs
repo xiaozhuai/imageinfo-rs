@@ -575,8 +575,8 @@ fn test_jpg() {
             full_ext: "jpeg",
             mimetype: "image/jpeg",
             size: ImageSize {
-                width: 1,
-                height: 2
+                width: 2,
+                height: 1
             },
             entry_sizes: vec![],
         }
@@ -590,8 +590,8 @@ fn test_jpg() {
             full_ext: "jpeg",
             mimetype: "image/jpeg",
             size: ImageSize {
-                width: 1,
-                height: 2
+                width: 2,
+                height: 1
             },
             entry_sizes: vec![],
         }
@@ -697,6 +697,21 @@ fn test_jpg() {
             size: ImageSize {
                 width: 4800,
                 height: 3600
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/jpg/rotation-90.jpg"),
+        ImageInfo {
+            format: ImageFormat::JPEG,
+            ext: "jpg",
+            full_ext: "jpeg",
+            mimetype: "image/jpeg",
+            size: ImageSize {
+                width: 3024,
+                height: 4032
             },
             entry_sizes: vec![],
         }
