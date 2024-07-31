@@ -145,6 +145,21 @@ fn test_heic() {
             entry_sizes: vec![],
         }
     );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/heic/sample4.heic"),
+        ImageInfo {
+            format: ImageFormat::HEIC,
+            ext: "heic",
+            full_ext: "heic",
+            mimetype: "image/heic",
+            size: ImageSize {
+                width: 2252,
+                height: 4000
+            },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]

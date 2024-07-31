@@ -1,9 +1,10 @@
 use crate::{ImageFormat, ImageInfo, ImageInfoError, ImageInfoResult, ImageSize, ReadInterface};
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 use std::io::{BufRead, Seek};
 
 // https://nokiatech.github.io/heif/technical.html
 // https://www.jianshu.com/p/b016d10a087d
+// https://github.com/ksvc/MediaParser
 pub fn try_avif_heic<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
 where
     R: BufRead + Seek,
@@ -120,7 +121,7 @@ where
 
     let buffer = ri.read(ftyp_box_length + 12, meta_length)?;
     let mut offset = 0usize;
-    let mut end = meta_length;
+    let end = meta_length;
 
     //
     // find ispe box
@@ -133,24 +134,106 @@ where
     //           - ...
     //           - ispe
     //
+    let mut pitm_id = 1;
+    let mut ipma_map: HashMap<u16, HashSet<u8>> = HashMap::new();
+    let mut ipco_start = 0usize;
+    let mut ipco_end = 0usize;
+    let mut ipco_child_index = 1;
+    let mut ispe_map: HashMap<u16, ImageSize> = HashMap::new();
+    let mut irot_map: HashMap<u16, u8> = HashMap::new();
     while offset < end {
         if offset + 8 > end {
-            return Err(ImageInfoError::UnrecognizedFormat);
+            break;
         }
         let box_size = buffer.read_u32_be(offset) as usize;
         if box_size < 8 || (offset as u64) + (box_size as u64) > (end as u64) {
-            return Err(ImageInfoError::UnrecognizedFormat);
+            break;
         }
 
-        if buffer.cmp_any_of(offset + 4, 4, vec![b"iprp", b"ipco"]) {
-            end = offset + box_size;
+        if buffer.cmp(offset + 4, 4, b"pitm") {
+            if box_size < 14 {
+                return Err(ImageInfoError::UnrecognizedFormat);
+            }
+            pitm_id = buffer.read_u16_be(offset + 12);
+            offset += box_size;
+        } else if buffer.cmp(offset + 4, 4, b"ipma") {
+            if box_size < 16 {
+                return Err(ImageInfoError::UnrecognizedFormat);
+            }
+            let entry_count = buffer.read_u16_be(offset + 14);
+            let mut t = offset + 16;
+            for _ in 0..entry_count {
+                if box_size < 18 {
+                    return Err(ImageInfoError::UnrecognizedFormat);
+                }
+                let item_id = buffer.read_u16_be(t);
+                t += 2;
+                if box_size < 19 {
+                    return Err(ImageInfoError::UnrecognizedFormat);
+                }
+                let index_count = buffer.read_u8(t);
+                t += 1;
+                if box_size < 19 + (index_count as usize) {
+                    return Err(ImageInfoError::UnrecognizedFormat);
+                }
+                let mut indices = HashSet::new();
+                for _ in 0..index_count {
+                    indices.insert(buffer.read_u8(t) & 0x0F);
+                    t += 1;
+                }
+                ipma_map.insert(item_id, indices);
+            }
+            offset += box_size;
+        } else if buffer.cmp(offset + 4, 4, b"iprp") {
+            offset += 8;
+        } else if buffer.cmp(offset + 4, 4, b"ipco") {
+            ipco_start = offset;
+            ipco_end = offset + box_size;
             offset += 8;
         } else if buffer.cmp(offset + 4, 4, b"ispe") {
-            ret.size.width = buffer.read_u32_be(offset + 12) as i64;
-            ret.size.height = buffer.read_u32_be(offset + 16) as i64;
-            return Ok(ret);
-        } else {
+            if box_size < 20 {
+                return Err(ImageInfoError::UnrecognizedFormat);
+            }
+            let size = ImageSize {
+                width: buffer.read_u32_be(offset + 12) as i64,
+                height: buffer.read_u32_be(offset + 16) as i64,
+            };
+            ispe_map.insert(ipco_child_index, size);
+            ipco_child_index += 1;
             offset += box_size;
+        } else if buffer.cmp(offset + 4, 4, b"irot") {
+            if box_size < 9 {
+                return Err(ImageInfoError::UnrecognizedFormat);
+            }
+            let irot = buffer.read_u8(offset + 8);
+            irot_map.insert(ipco_child_index, irot);
+            ipco_child_index += 1;
+            offset += box_size;
+        } else {
+            if offset > ipco_start && offset < ipco_end {
+                ipco_child_index += 1;
+            }
+            offset += box_size;
+        }
+    }
+
+    if let Some(indices) = ipma_map.get(&pitm_id) {
+        let mut irot = 0u8;
+        for it in irot_map {
+            if indices.contains(&(it.0 as u8)) {
+                irot = it.1;
+                break;
+            }
+        }
+        for it in ispe_map {
+            if indices.contains(&(it.0 as u8)) {
+                let mut size = it.1;
+                if irot == 1 || irot == 3 || irot == 6 || irot == 7 {
+                    std::mem::swap(&mut size.width, &mut size.height);
+                }
+                ret.size = size;
+                return Ok(ret);
+            }
         }
     }
 
