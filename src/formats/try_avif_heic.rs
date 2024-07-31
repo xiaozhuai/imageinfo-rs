@@ -139,8 +139,8 @@ where
     let mut ipco_start = 0usize;
     let mut ipco_end = 0usize;
     let mut ipco_child_index = 1;
-    let mut ispe_map: HashMap<u16, ImageSize> = HashMap::new();
-    let mut irot_map: HashMap<u16, u8> = HashMap::new();
+    let mut ispe_map: HashMap<u8, ImageSize> = HashMap::new();
+    let mut irot_map: HashMap<u8, u8> = HashMap::new();
     while offset < end {
         if offset + 8 > end {
             break;
@@ -220,13 +220,13 @@ where
     if let Some(indices) = ipma_map.get(&pitm_id) {
         let mut irot = 0u8;
         for it in irot_map {
-            if indices.contains(&(it.0 as u8)) {
+            if indices.contains(&(it.0)) {
                 irot = it.1;
                 break;
             }
         }
         for it in ispe_map {
-            if indices.contains(&(it.0 as u8)) {
+            if indices.contains(&(it.0)) {
                 let mut size = it.1;
                 if irot == 1 || irot == 3 || irot == 6 || irot == 7 {
                     std::mem::swap(&mut size.width, &mut size.height);
