@@ -3,7 +3,7 @@ use std::io::{BufRead, Seek};
 
 // https://docs.fileformat.com/image/jp2/
 // https://docs.fileformat.com/image/jpx/
-pub fn try_jp2_jpx<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+pub fn try_jpeg2000<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
 where
     R: BufRead + Seek,
 {
@@ -35,6 +35,20 @@ where
                 ext: "jp2",
                 full_ext: "jp2",
                 mimetype: "image/jp2",
+                size: ImageSize {
+                    width: 0,
+                    height: 0,
+                },
+                entry_sizes: vec![],
+            }
+        }
+        // type == jph
+        else if buffer.cmp(8, 4, b"jph ") {
+            ImageInfo {
+                format: ImageFormat::JPH,
+                ext: "jph",
+                full_ext: "jph",
+                mimetype: "image/jph",
                 size: ImageSize {
                     width: 0,
                     height: 0,

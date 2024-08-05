@@ -515,7 +515,7 @@ fn test_icns() {
 }
 
 #[test]
-fn test_j2k() {
+fn test_jpeg2000_code_stream() {
     assert_eq_ok!(
         ImageInfo::from_file_path("images/valid/j2k/balloon.j2k"),
         ImageInfo {
@@ -604,6 +604,24 @@ fn test_jp2() {
             size: ImageSize {
                 width: 2717,
                 height: 3701
+            },
+            entry_sizes: vec![],
+        }
+    );
+}
+
+#[test]
+fn test_jph() {
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/jph/byte.jph"),
+        ImageInfo {
+            format: ImageFormat::JPH,
+            ext: "jph",
+            full_ext: "jph",
+            mimetype: "image/jph",
+            size: ImageSize {
+                width: 20,
+                height: 20
             },
             entry_sizes: vec![],
         }

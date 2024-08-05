@@ -3,7 +3,10 @@ use std::io::{BufRead, Seek};
 
 // https://docs.fileformat.com/image/jp2/
 // https://docs.fileformat.com/image/jpx/
-pub fn try_j2k<R>(ri: &mut ReadInterface<R>, length: usize) -> ImageInfoResult<ImageInfo>
+pub fn try_jpeg2000_code_stream<R>(
+    ri: &mut ReadInterface<R>,
+    length: usize,
+) -> ImageInfoResult<ImageInfo>
 where
     R: BufRead + Seek,
 {

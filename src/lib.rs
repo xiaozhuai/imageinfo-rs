@@ -13,8 +13,8 @@ use formats::try_dds;
 use formats::try_gif;
 use formats::try_hdr;
 use formats::try_icns;
-use formats::try_j2k;
-use formats::try_jp2_jpx;
+use formats::try_jpeg2000;
+use formats::try_jpeg2000_code_stream;
 use formats::try_jpg;
 use formats::try_ktx;
 use formats::try_png;
@@ -45,6 +45,7 @@ pub enum ImageFormat {
     ICNS,
     J2K,
     JP2,
+    JPH,
     JPX,
     JPEG,
     KTX,
@@ -76,7 +77,7 @@ impl ImageInfo {
         let length = reader.seek(SeekFrom::End(0))? as usize;
         let mut ri = ReadInterface::from_reader(reader, length);
 
-        let dl: [(ImageFormat, Detector<_>); 20] = [
+        let dl: [(ImageFormat, Detector<_>); 21] = [
             (ImageFormat::AVIF, try_avif_heic),
             (ImageFormat::HEIC, try_avif_heic),
             (ImageFormat::BMP, try_bmp),
@@ -86,9 +87,10 @@ impl ImageInfo {
             (ImageFormat::GIF, try_gif),
             (ImageFormat::HDR, try_hdr),
             (ImageFormat::ICNS, try_icns),
-            (ImageFormat::J2K, try_j2k),
-            (ImageFormat::JP2, try_jp2_jpx),
-            (ImageFormat::JPX, try_jp2_jpx),
+            (ImageFormat::J2K, try_jpeg2000_code_stream),
+            (ImageFormat::JP2, try_jpeg2000),
+            (ImageFormat::JPH, try_jpeg2000),
+            (ImageFormat::JPX, try_jpeg2000),
             (ImageFormat::JPEG, try_jpg),
             (ImageFormat::KTX, try_ktx),
             (ImageFormat::PNG, try_png),
