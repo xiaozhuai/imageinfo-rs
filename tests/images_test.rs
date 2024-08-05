@@ -545,6 +545,36 @@ fn test_j2k() {
             entry_sizes: vec![],
         }
     );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/j2k/_00042.j2k"),
+        ImageInfo {
+            format: ImageFormat::J2K,
+            ext: "j2k",
+            full_ext: "j2k",
+            mimetype: "image/j2k",
+            size: ImageSize {
+                width: 1920,
+                height: 1080
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/j2k/cthead1.j2k"),
+        ImageInfo {
+            format: ImageFormat::J2K,
+            ext: "j2k",
+            full_ext: "j2k",
+            mimetype: "image/j2k",
+            size: ImageSize {
+                width: 256,
+                height: 256
+            },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]

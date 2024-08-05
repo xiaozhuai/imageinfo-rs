@@ -10,13 +10,11 @@ where
     if length < 16 {
         return Err(ImageInfoError::UnrecognizedFormat);
     }
+    // SOC and SIZ
     let buffer = ri.read(0, 16)?;
-    if buffer.cmp(0, 2, b"\xFF\x4F") {
-        let soc_length = buffer.read_u16_be(2);
-        if length < soc_length as usize + 2 {
-            return Err(ImageInfoError::UnrecognizedFormat);
-        }
-        if !buffer.cmp(4, 4, b"\x00\x2F\x00\x00") {
+    if buffer.cmp(0, 2, b"\xFF\x4F") && buffer.cmp(2, 2, b"\xFF\x51") {
+        let siz_length = buffer.read_u16_be(4);
+        if length < siz_length as usize + 4 {
             return Err(ImageInfoError::UnrecognizedFormat);
         }
         return Ok(ImageInfo {
