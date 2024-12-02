@@ -947,6 +947,51 @@ fn test_tiff() {
             entry_sizes: vec![],
         }
     );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/tiff/BigTIFF.tif"),
+        ImageInfo {
+            format: ImageFormat::TIFF,
+            ext: "tif",
+            full_ext: "tiff",
+            mimetype: "image/tiff",
+            size: ImageSize {
+                width: 64,
+                height: 64
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/tiff/BigTIFFLong.tif"),
+        ImageInfo {
+            format: ImageFormat::TIFF,
+            ext: "tif",
+            full_ext: "tiff",
+            mimetype: "image/tiff",
+            size: ImageSize {
+                width: 64,
+                height: 64
+            },
+            entry_sizes: vec![],
+        }
+    );
+
+    assert_eq_ok!(
+        ImageInfo::from_file_path("images/valid/tiff/BigTIFFMotorola.tif"),
+        ImageInfo {
+            format: ImageFormat::TIFF,
+            ext: "tif",
+            full_ext: "tiff",
+            mimetype: "image/tiff",
+            size: ImageSize {
+                width: 64,
+                height: 64
+            },
+            entry_sizes: vec![],
+        }
+    );
 }
 
 #[test]
