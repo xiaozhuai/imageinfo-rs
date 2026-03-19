@@ -1,42 +1,40 @@
 name: ci
 
 on:
-    push:
-        branches: [ master ]
-    pull_request:
-        branches: [ master ]
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
-    code-style:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-                with:
-                    submodules: recursive
-            -   name: Check code style
-                run: |
-                    cargo fmt --all --check
+  code-style:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Check code style
+        run: |
+          cargo fmt --all --check
 
-    build:
-        needs: code-style
-        runs-on: ${{ matrix.platform }}
-        strategy:
-            matrix:
-                platform:
-                    - ubuntu-latest
-                    - ubuntu-22.04
-                    - ubuntu-20.04
-                    - macos-latest
-                    - macos-13
-                    - macos-12
-                    - windows-latest
-                    - windows-2019
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-                with:
-                    submodules: recursive
-            -   name: Build
-                run: |
-                    cargo test
+  build:
+    needs: code-style
+    runs-on: ${{ matrix.platform }}
+    strategy:
+      matrix:
+        platform:
+          - ubuntu-24.04
+          - ubuntu-22.04
+          - macos-14
+          - macos-15
+          - windows-2022
+          - windows-2025
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          submodules: recursive
+      - name: Build
+        run: |
+          cargo test
